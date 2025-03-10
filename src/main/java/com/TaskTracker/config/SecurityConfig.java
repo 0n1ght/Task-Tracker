@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/req/signup", "/css/**", "/js/**", "/h2-console/**", "/**").permitAll();
+                    registry.requestMatchers("/api/auth/**", "/req/signup", "/**").permitAll(); // For unit testing I'm adding /**
                     registry.anyRequest().authenticated();
                 })
 
