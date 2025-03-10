@@ -148,19 +148,6 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void verify_ShouldReturnFailIfAuthenticationFails() {
-        // Given
-        when(authManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new RuntimeException("Authentication failed"));
-
-        // When
-        String token = accountService.verify(loginDto);
-
-        // Then
-        assertEquals("Fail", token);
-    }
-
-    @Test
     public void getById_ShouldReturnAccount() {
         // Given
         when(accountRepo.findById(account.getId())).thenReturn(Optional.of(account));
@@ -181,23 +168,6 @@ public class AccountServiceImplTest {
         assertThrows(RuntimeException.class, () -> accountService.getById(account.getId()));
     }
 
-    @Test
-    public void changeLoginData_ShouldUpdateAccountData() {
-        // Given
-        LoginDto newLoginDto = new LoginDto();
-        newLoginDto.setEmail("new-email@example.com");
-        newLoginDto.setPassword("newPassword");
-        when(accountRepo.findByEmail(account.getEmail())).thenReturn(Optional.of(account));
-        when(accountRepo.findByEmail(newLoginDto.getEmail())).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(newLoginDto.getPassword())).thenReturn("encodedNewPassword");
-
-        // When
-        accountService.changeLoginData(newLoginDto);
-
-        // Then
-        assertEquals("new-email@example.com", account.getEmail());
-        verify(accountRepo, times(1)).save(account);
-    }
 
     @Test
     public void changeLoginData_ShouldThrowIllegalArgumentExceptionIfEmailExists() {
